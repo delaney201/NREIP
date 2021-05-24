@@ -11,12 +11,15 @@ void setup() {
   pinMode(rxPin, INPUT);
   pinMode(rxPin, OUTPUT);
   BTSerial.begin(9600);
-  Serial.begin(9600)l //for debugging
+  while(!BTSerial);  //wait for connection
+  Serial.begin(9600); //for debugging
 }
 
 void loop() {
   potValue = analogRead(A0);
+  Serial.print(potValue);
+  Serial.print(" ");
   convertedVal = map(potValue, 0, 1023, 0, 255);  //convert to 1 byte to be transmitted
-  BTSerial.write(convertedVal);
+  BTSerial.print(convertedVal);  //transmit arduino -> computer
   Serial.println(convertedVal);
 }
