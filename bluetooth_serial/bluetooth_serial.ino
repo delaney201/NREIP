@@ -17,6 +17,6 @@ void setup() {
 void loop() {
   potValue = analogRead(A0);
   convertedVal = map(potValue, 0, 1023, 0, 255);  //convert to 1 byte to be transmitted
-  BTSerial.write(angle);
-  Serial.println(angle);
+  BTSerial.write(convertedVal);
+  Serial.println(convertedVal);
 }
