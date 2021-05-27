@@ -17,6 +17,7 @@ int input_do;
 int bitCounter = 9;
 word current_Data = 0;
 const int other_bits = 6;
+int convertedVal;
 
 
 void readData(){
@@ -30,11 +31,11 @@ void readData(){
     digitalWrite(pin_CLK, HIGH);
     delay(0.000375);
     input_do = digitalRead(pin_DO);
-    Serial.print(input_do);
+    //Serial.print(input_do);
     current_Data |= (input_do << bitCounter);    
     bitCounter--;
   }
-  Serial.print(" ");
+ // Serial.print(" ");
   //extra clk ticks for status and parity bits
   for(int i = 0; i < other_bits; i++){
     digitalWrite(pin_CLK, LOW);
@@ -46,9 +47,9 @@ void readData(){
   digitalWrite(pin_CLK, HIGH);
   delay(0.0001); //100 ns
   digitalWrite(pin_CS, HIGH);  //back to default
+  convertedVal = map(current_Data, 0, 1023, 0, 360);
   Serial.println(current_Data);
-  BTSerial.print(current_Data);
-  BTSerial.print("\n");
+  BTSerial.println(convertedVal);
 }
 
 void setup() {
@@ -68,5 +69,5 @@ void setup() {
 
 void loop() {
   readData();
-  delay(500); //measure angle data every 500 ms
+  delay(2); //measure angle data every 2 ms
 }
