@@ -7,9 +7,12 @@ const int txPin = 8;
 SoftwareSerial BTSerial(rxPin, txPin);
 
 //rotary encoder pins
-const int pin_CLK = 6;
+const int pin_CLK = 4;
 const int pin_DO = 5;
-const int pin_CS = 4; 
+const int pin_CS = 6; 
+
+//button input pin
+const int pin_BTN = 7;
 
 //encoder signal input values
 int input_do;
@@ -18,7 +21,16 @@ int bitCounter = 9;
 word current_Data = 0;
 const int other_bits = 6;
 int convertedVal;
+int buttonVal;
+String data_str = "";
+String comma = ",";
 
+
+void readBTN(){
+  buttonVal = digitalRead(pin_BTN);
+//  Serial.print("B: ");
+ // Serial.println(buttonVal);
+}
 
 void readData(){
   digitalWrite(pin_CS, HIGH);
@@ -48,8 +60,10 @@ void readData(){
   delay(0.0001); //100 ns
   digitalWrite(pin_CS, HIGH);  //back to default
   convertedVal = map(current_Data, 0, 1023, 0, 360);
-  Serial.println(current_Data);
-  BTSerial.println(convertedVal);
+  readBTN();
+  data_str = buttonVal + comma + convertedVal;
+  Serial.println(data_str);
+  BTSerial.println(data_str);   //serial output will be button data,encoder data
 }
 
 void setup() {
@@ -58,6 +72,7 @@ void setup() {
   pinMode(pin_CS, OUTPUT);
   pinMode(rxPin, INPUT);
   pinMode(rxPin, OUTPUT);
+  pinMode(pin_BTN, INPUT);
   BTSerial.begin(9600);
   while(!BTSerial);  //wait for connection
   

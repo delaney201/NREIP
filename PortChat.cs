@@ -15,6 +15,8 @@ public class SerialCommunication : MonoBehaviour
     //test variable
     public int value = 0;
     public float conversion = 0;
+    public int buttonPressed = 0;
+
 
     void Start()
     {
@@ -29,7 +31,9 @@ public class SerialCommunication : MonoBehaviour
             //Debug.Log(data_str);
             if (!data_str.Equals(""))
             {
-                value = int.Parse(data_str);  //check if data shows up in Unity
+                string[] numbers = data_str.Split(',');
+                buttonPressed = int.Parse(numbers[0]);
+                value = int.Parse(numbers[1]); //check if data shows up in Unity
                 conversion = ((float)value) / 100f;
                 transform.localPosition = new Vector3(conversion, 0, 0);
             }
