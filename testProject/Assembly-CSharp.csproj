@@ -53,7 +53,8 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\SerialCommunication.cs" />
-     <Compile Include="Assets\Teleportation.cs" />
+     <Compile Include="Assets\TrackerSetup.cs" />
+     <Compile Include="Assets\Teleport.cs" />
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity2020_3_7f1/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
  </Reference>
