@@ -15,9 +15,10 @@ public class SerialCommunication : MonoBehaviour
     //test variable
     public int value = 0;
     public float conversion = 0;
+    public int debugBtn;
     public static int buttonPressed = 0;
     public static int prevButtonPressed = 0;
-    
+    private string[] numbers;
    
 
    
@@ -30,36 +31,46 @@ public class SerialCommunication : MonoBehaviour
     {
         try
         {
-            data_str = data_stream.ReadLine();  //read single encoder measurement 
+            data_str = data_stream.ReadLine(); //read single encoder measurement 
             //Debug.Log(data_str);
             if (!data_str.Equals(""))
-            { 
-               string[] numbers = data_str.Split(',');
-               prevButtonPressed = buttonPressed;
-               buttonPressed = int.Parse(numbers[0]);  //update button input
-               try
-               {
-                   value = int.Parse(numbers[1]); //check if data shows up in Unity
-                   conversion = ((float)value)/100f;
-                   transform.localPosition = new Vector3(conversion, 0, 0);
-                   
-               }
-               catch (IndexOutOfRangeException)
-               {
-                   // Debug.Log("problem with data");
-               }
-               
+            {
+                numbers = data_str.Split(',');
+                prevButtonPressed = buttonPressed;
+                buttonPressed = int.Parse(numbers[0]); //update button input
+                if (buttonPressed == 1)
+                {
+                    Debug.Log("pressedddd");
+                }
+                debugBtn = buttonPressed;
+                try
+                {
+                    value = int.Parse(numbers[1]); //check if data shows up in Unity
+                    conversion = ((float) value) / 100f;
+                    transform.localPosition = new Vector3(conversion, 0, 0);
+
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    // Debug.Log("problem with data");
+                }
+
             }
             else
             {
                 //Debug.Log("invalid data");
             }
         }
-        catch(TimeoutException)
+        catch (TimeoutException)
         {
             //read buffer is temporarily empty (do nothing)
-           // Debug.Log("buffer empty");
-        }  
+            // Debug.Log("buffer empty");
+        }
+        catch (FormatException)
+        {
+            Debug.Log(numbers[0]);
+            Debug.Log(numbers[1]);
+        }
         
     }
 }

@@ -240,6 +240,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   value: 0
   conversion: 0
+  debugBtn: 0
 --- !u!136 &83991283
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1033,7 +1034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 447954, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -1.021
       objectReference: {fileID: 0}
     - target: {fileID: 447954, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_LocalRotation.w

@@ -244,6 +244,7 @@ namespace Valve.VR.InteractionSystem
 			{
 				if ( visible )
 				{
+					//Debug.Log("visible");
 					if ( WasTeleportButtonReleased( hand ) )
 					{
 						if ( pointerHand == hand ) //This is the pointer hand
@@ -1098,15 +1099,11 @@ namespace Valve.VR.InteractionSystem
 				}
 				else
                 {
-                    //return teleportAction.GetStateUp(hand.handType);
-                    if (SerialCommunication.buttonPressed == 0 && SerialCommunication.prevButtonPressed == 1)  //btn was just released
-                    {
-	                    return true;
-                    }
+	               // return teleportAction.GetStateUp(hand.handType);
+	                return SerialCommunication.buttonPressed == 0 && SerialCommunication.prevButtonPressed == 1;
                     //return hand.controller.GetPressUp( SteamVR_Controller.ButtonMask.Touchpad );
                 }
 			}
-
 			return false;
 		}
 
@@ -1121,14 +1118,10 @@ namespace Valve.VR.InteractionSystem
 				}
 				else
                 {
-                    //return teleportAction.GetState(hand.handType);
-                    if (SerialCommunication.buttonPressed == 1)  //btn currently being pressed
-                    {
-	                    return true;
-                    }
-				}
+	                //return teleportAction.GetState(hand.handType);
+	                return SerialCommunication.buttonPressed == 1; //btn currently being pressed
+                }
 			}
-
 			return false;
 		}
 
@@ -1144,15 +1137,12 @@ namespace Valve.VR.InteractionSystem
 				}
 				else
                 {
-                    //return teleportAction.GetStateDown(hand.handType);
-                    if (SerialCommunication.buttonPressed == 1 && SerialCommunication.prevButtonPressed == 0) //btn has just started being pressed
-                    {
-	                    return true;
-                    }
-                    //return hand.controller.GetPressDown( SteamVR_Controller.ButtonMask.Touchpad );
-				}
+                   // return teleportAction.GetStateDown(hand.handType);
+                   return SerialCommunication.buttonPressed == 1 && SerialCommunication.prevButtonPressed == 0;
+                   //return hand.controller.GetPressDown( SteamVR_Controller.ButtonMask.Touchpad );
+                }
 			}
-
+			//return SerialCommunication.buttonPressed == 1 && SerialCommunication.prevButtonPressed == 0;
 			return false;
 		}
 
