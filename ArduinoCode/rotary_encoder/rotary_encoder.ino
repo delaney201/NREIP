@@ -11,8 +11,9 @@ const int pin_CLK = 4;
 const int pin_DO = 5;
 const int pin_CS = 6; 
 
-//button input pin
-const int pin_BTN = 7;
+//button input pins
+const int pin_BTN = 7;   //teleport button
+const int pin_CBTN = 10;  //calibrate button
 
 //encoder signal input values
 int input_do;
@@ -20,16 +21,21 @@ int input_do;
 int bitCounter = 9;
 word current_Data = 0;
 const int other_bits = 6;
-int convertedVal;
-int buttonVal;
+int convertedVal = 360;
+int prevConvertedVal;
+int buttonVal = 0;
+int prevButtonVal;
+int CButtonVal = 0;
+int prevCButtonVal;
 String data_str = "";
 String comma = ",";
 
 
 void readBTN(){
+  prevButtonVal = buttonVal;
   buttonVal = digitalRead(pin_BTN);
-//  Serial.print("B: ");
- // Serial.println(buttonVal);
+  prevCButtonVal = CButtonVal;
+  CButtonVal = digitalRead(pin_CBTN);
 }
 
 void readData(){
@@ -59,11 +65,31 @@ void readData(){
   digitalWrite(pin_CLK, HIGH);
   delay(0.0001); //100 ns
   digitalWrite(pin_CS, HIGH);  //back to default
+  prevConvertedVal = convertedVal;
   convertedVal = map(current_Data, 0, 1023, 0, 360);
-  readBTN();
-  data_str = buttonVal + comma + convertedVal;
+  readBTN(); 
+  if(buttonVal != prevButtonVal){  //teleport btn pressed/released
+    data_str = buttonVal;  
+  }
+  else{
+    data_str = " ";
+  }
+  if(CButtonVal != prevCButtonVal){   //calibrate btn pressed/released
+    data_str = data_str + comma + CButtonVal;
+  }
+  else{
+    data_str = data_str + comma + " ";
+  }
+  if(convertedVal != prevConvertedVal){  //encoder rotated
+    data_str = data_str + comma + convertedVal;      
+  }
+  else{
+    data_str = data_str + comma + " ";    
+  }  
+  if(convertedVal != prevConvertedVal || buttonVal != prevButtonVal || CButtonVal != prevCButtonVal){  //something changed
+     BTSerial.println(data_str);            //data will be btn data,calibrate btn data,encoder data or empty string in place if no change
+  }
   Serial.println(data_str);
-  BTSerial.println(data_str);   //serial output will be button data,encoder data
 }
 
 void setup() {
