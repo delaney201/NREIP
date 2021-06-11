@@ -66,7 +66,7 @@ void readData(){
   delay(0.0001); //100 ns
   digitalWrite(pin_CS, HIGH);  //back to default
   prevConvertedVal = convertedVal;
-  convertedVal = map(current_Data, 0, 1023, 0, 360);
+  convertedVal = map(current_Data, 0, 1023, 0, 255);
   readBTN(); 
   if(buttonVal != prevButtonVal){  //teleport btn pressed/released
     data_str = buttonVal;  
