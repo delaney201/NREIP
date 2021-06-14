@@ -19,7 +19,6 @@ public class SerialCommunication : MonoBehaviour
     public SerialPort data_stream = new SerialPort("COM5", 9600);
 
 
-    static byte ubyte = (byte) 'u';
 
 
     //test variable
@@ -35,12 +34,18 @@ public class SerialCommunication : MonoBehaviour
     
     void Start()
     {
-        //data_stream.DataReceived += DataReceivedHandler;
         data_stream.Open();
-        ReadFunction();
+        //ReadFunction();
     }
-    
-    private void ReadFunction()
+
+    private void Update()
+    {
+        string temp = data_stream.ReadExisting();
+        Debug.Log(temp);
+        ProcessDataStr(temp);
+    }
+
+    /*private void ReadFunction()
     {
         byte[] buffer = new byte[4096];
         Action kickoffRead = null;
@@ -51,22 +56,20 @@ public class SerialCommunication : MonoBehaviour
                 int count = data_stream.BaseStream.EndRead(ar);
                 byte[] dst = new byte[count];
                 Buffer.BlockCopy(buffer, 0, dst, 0, count);
-                Debug.Log("im working");
+               // Debug.Log("im working");
                 ProcessData(dst);
             }
             catch (Exception exception)
             {
-                Console.WriteLine("SerialPort error !");
+               // Console.WriteLine("SerialPort error !");
             }
             kickoffRead();
         }, null)); kickoffRead();
     }
-
     void ProcessData(byte[] data)
     {
         int nextStart = 0;
-        byte nl = (byte)'\n';
-        Debug.Log("data to process");
+      //  Debug.Log("data to process");
         String str = Encoding.UTF8.GetString(data);
         Debug.Log(str);
         string temp = "";
@@ -85,6 +88,37 @@ public class SerialCommunication : MonoBehaviour
                 if (data[i] != 13 && data[i] != 10)
                 {
                     leftover = str.Substring(nextStart, i - nextStart + 1);
+                }
+                else  //ends with new line -> no leftover
+                {
+                    leftover = "";
+                }
+            }
+        }
+        
+        //data_str = System.Text.Encoding.UTF8.GetString(data, 0, data.Length);
+        
+    }*/
+
+    void ProcessDataStr(string data)
+    {
+        int nextStart = 0;
+        string temp = "";
+        for (int i = 0; i < data.Length; i++)
+        {
+            if (data[i] == 13)  //newline char found
+            {
+                temp = leftover + data.Substring(nextStart, i - nextStart);
+                nextStart = i + 2;
+                leftover = "";
+                decodeData(temp);
+                //call decode function
+            }
+            if (i == data.Length - 1)  //last byte
+            {
+                if (data[i] != 13 && data[i] != 10)
+                {
+                    leftover = data.Substring(nextStart, i - nextStart + 1);
                 }
                 else  //ends with new line -> no leftover
                 {
@@ -134,15 +168,12 @@ public class SerialCommunication : MonoBehaviour
         }
         catch (FormatException)
         {
-            Debug.Log("problemo");
-            Debug.Log(numbers[0]);
-            Debug.Log(numbers[1]);
+           // Debug.Log(numbers[0]);
+          //  Debug.Log(numbers[1]);
         }
         catch (IndexOutOfRangeException)
         {
             // Debug.Log("problem with data");
         }   
     }
-
-
 }

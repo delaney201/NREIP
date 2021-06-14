@@ -1137,7 +1137,7 @@ namespace Valve.VR.InteractionSystem
 				}
 				else
                 {
-                   // return teleportAction.GetStateDown(hand.handType);
+                    //return teleportAction.GetStateDown(hand.handType);
                    return SerialCommunication.buttonPressed == 1 && SerialCommunication.prevButtonPressed == 0;
                    //return hand.controller.GetPressDown( SteamVR_Controller.ButtonMask.Touchpad );
                 }
